@@ -13,7 +13,7 @@ function Searchbar({ onSubmit }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (image.trim() === "") {
-      toast("Please enter the query !");
+      toast("Please enter the query!");
       return;
     }
     // this.props.onSubmit - вызывает props из App под именем onSubmit

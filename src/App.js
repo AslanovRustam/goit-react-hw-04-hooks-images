@@ -10,18 +10,23 @@ import ImagesInfo from "./ImagesInfo/ImagesInfo";
 export default function App() {
   const [image, setImage] = useState("");
 
+  // useEffect(() => {
+  //   if (image !== "") {
+  //     setImage("");
+  //   }
+  // });
   const prevImageRef = useRef("");
   useEffect(() => {
     prevImageRef.current = image;
   });
   const prevImageName = prevImageRef.current;
-  const handleFormSubmit = (image) => {
-    setImage(image);
-  };
+  // const handleFormSubmit = (image) => {
+  //   setImage(image);
+  // };
   return (
     <>
-      <Searchbar onSubmit={handleFormSubmit} />
-      <ImagesInfo imageName={image} prevImg={prevImageName} />
+      <Searchbar onSubmit={setImage} />
+      <ImagesInfo imgItem={image} prevName={prevImageName} />
       <ToastContainer />
     </>
   );

@@ -14,28 +14,35 @@ const Status = {
   REJECTED: "rejected",
 };
 ////////////////////////////////////////////
-export default function ImagesInfo({ imageName, prevImg }) {
+export default function ImagesInfo({ imgItem, prevName }) {
   const [images, setImages] = useState([]);
   const [status, setStatus] = useState(Status.IDLE);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    if (imageName !== prevImg) {
-      ///// обнуляет массив фото и сбрасывает страницу
-      setImages([]);
-      setPage(1);
-    }
-  }, [imageName, prevImg]);
+  const resetImages = () => {
+    // if (prevProps.imgItem !== props.imgItem) {
+    ///// обнуляет массив фото и сбрасывает страницу
+    setImages([]);
+    setPage(1);
+  };
 
   useEffect(() => {
-    if (prevImg === "") {
-      console.log("no such images found");
+    // resetImages();
+    if (!imgItem) {
       return;
     }
-    // setStatus(Status.PENDING);
-    // fetchImageGallery();
-    Api.fetchImages(imageName, page)
+    fetchImageGallery();
+  }, [imgItem, page]);
+
+  useEffect(() => {
+    setImages([]);
+    setPage(1);
+  }, [prevName]);
+
+  const fetchImageGallery = () => {
+    Api.fetchImages(imgItem, page)
+      // .then((images) => this.setState({ images, status: "resolved" }))
       .then((newImages) => {
         if (newImages.total !== 0) {
           setImages((prevState) => [...prevState, ...newImages.hits]);
@@ -44,71 +51,13 @@ export default function ImagesInfo({ imageName, prevImg }) {
         }
         return Promise.reject(new Error("Invalid request"));
       })
-      .catch((error) => setStatus(Status.REJECTED), setError({ error }));
-  }, [imageName, page, prevImg]);
-  ////////////////////////////////////////////
-  // const fetchImageGallery = (prevImg, page) => {
-  //   // const nextImg = this.props.imgItem;
-  //   // const nextPage = this.state.page;
-  //   Api.fetchImages(prevImg, page)
-  //     // .then((images) => this.setState({ images, status: "resolved" }))
-  //     .then((newImages) => {
-  //       if (newImages.total !== 0) {
-  //         setImages((prevState) => [...prevState, ...newImages.hits]);
-  //         setStatus(Status.RESOLVED);
-  //         // status: "resolved",
-  //         return;
-  //       }
-  //       return Promise.reject(new Error("Invalid request"));
-  //     })
-  //     .catch((error) => setStatus(Status.REJECTED), setError({ error }));
-  // };
-  // componentDidUpdate(prevProps, prevState) {
-  //   const prevImg = prevProps.imgItem;
-  //   const nextImg = this.props.imgItem;
-  //   const prevPage = prevState.page;
-  //   const nextPage = this.state.page;
-  //   console.log(nextPage);
+      .catch((error) => setStatus(Status.REJECTED));
+  };
 
-  // if (prevImg !== nextImg) {
-  //   ///// обнуляет массив фото и сбрасывает страницу
-  //   this.setState({ page: 1, images: [] });
-  // }
+  const onClickLoadMoreBtn = () => {
+    setPage((prevState) => prevState + 1);
+  };
 
-  //   if (prevImg !== nextImg || prevPage !== nextPage) {
-  //     // this.setState({ status: "pending" });
-  //     this.fetchImageGallery();
-  //     // this.setState({ status: "resolved" });
-  //   }
-  // }
-
-  // const fetchImageGallery = () => {
-  //   const nextImg = this.props.imgItem;
-  //   const nextPage = this.state.page;
-  //   Api.fetchImages(nextImg, nextPage)
-  //     // .then((images) => this.setState({ images, status: "resolved" }))
-  //     .then((newImages) => {
-  //       if (newImages.total !== 0) {
-  //         this.setState((prevState) => ({
-  //           images: [...prevState.images, ...newImages.hits],
-  //           status: "resolved",
-  //         }));
-  //         return;
-  //       }
-  //       return Promise.reject(new Error("Invalid request"));
-  //     })
-  //     .catch((error) => this.setState({ error, status: "rejected" }));
-  // };
-
-  // onClickLoadMoreBtn = () => {
-  //   // console.log('больше');
-
-  //   this.setState((prevState) => ({
-  //     page: prevState.page + 1,
-  //   }));
-  // };
-
-  // const { error, status, images } = this.state;
   if (status === Status.IDLE) {
     return <p>Please, enter the search query</p>;
   }
@@ -116,17 +65,14 @@ export default function ImagesInfo({ imageName, prevImg }) {
     return <Loader />;
   }
   if (status === Status.REJECTED) {
-    return <ImagesErrorView message={error.message} />;
+    return <ImagesErrorView />;
   }
   if (status === Status.RESOLVED) {
     return (
       <>
         <ImageGallery images={images} />
-        <Button onClick={setPage(page + 1)} />
+        <Button onClick={onClickLoadMoreBtn} />
       </>
     );
   }
 }
-//  ImagesInfo.propTypes = {
-//     imgItem: PropTypes.string,
-//   }
