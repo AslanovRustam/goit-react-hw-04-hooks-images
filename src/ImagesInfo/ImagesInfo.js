@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import ImagesErrorView from "../ImagesErrorView/ImagesErrorView";
 import ImageGallery from "../ImageGallery/Imagegallery";
 import Api from "../ImagesApi";
-import Button from "../Button/Button";
+import ButtonFunc from "../Button/Button";
 import Loader from "../Loader/Loader";
 import s from "../ImagesInfo/image.modal.css";
 
@@ -71,7 +71,7 @@ export default function ImagesInfo({ imgItem, prevName }) {
     return (
       <>
         <ImageGallery images={images} />
-        <Button onClick={onClickLoadMoreBtn} />
+        <ButtonFunc onClick={onClickLoadMoreBtn} />
       </>
     );
   }

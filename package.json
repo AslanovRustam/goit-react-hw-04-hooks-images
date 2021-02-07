@@ -1,9 +1,11 @@
 {
-  "name": "goit-react-hw-03-image-finde",
+  "name": "goit-react-hw-04-image-finde",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://AslanovRustam.github.io/goit-react-hw-04-hooks-images",
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
